@@ -25,6 +25,8 @@ struct attribute {
 
 int key_f(int);
 
+int lines();
+
 void noecho();
 
 void raw();
@@ -36,6 +38,7 @@ class screen {
     void attron_(attribute);
     int getch_();
     void getmaxyx_(int& row, int& col) const;
+    void getnstr_(char* str, int n);
     void move_(int y, int x);
   public:
 
@@ -48,6 +51,8 @@ class screen {
     void attron(attribute attrs) { attron_(attrs); }
 
     int getch() { return getch_(); }
+
+    void getnstr(char* str, int n) { getnstr_(str, n); }
 
     void keypad(bool bf =true);
 

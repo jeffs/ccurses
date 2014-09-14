@@ -21,6 +21,8 @@ struct {
 
 int key_f(int i) { return KEY_F(i); }
 
+int lines() { return LINES; }
+
 void noecho() { if (ERR == ::noecho()) throw "noecho: ERR"; }
 
 void raw() { if (ERR == ::raw()) throw "raw: ERR"; }
@@ -47,6 +49,11 @@ int screen::getch_() { // getch is a macro
 
 void screen::getmaxyx_(int& row, int& col) const {
     getmaxyx(W, row, col);  // macro
+}
+
+void screen::getnstr_(char* str, int n) {
+    int r = wgetnstr(W, str, n);
+    if (ERR == r) throw "getnstr: ERR; n = " + to_string(n);
 }
 
 void screen::move_(int y, int x) {
