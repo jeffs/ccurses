@@ -8,9 +8,9 @@ namespace ccurses {
 
 struct {
 
-    int operator[](a key) const {
-        assert(a::bold == key);
-        return A_BOLD;
+    int operator[](a attrs) const {
+        return (attrs & a_bold      ? A_BOLD : 0)
+            |  (attrs & a_underline ? A_UNDERLINE : 0);
     }
 
 } const attr_map{};
@@ -41,14 +41,14 @@ screen::~screen() {
     assert(ERR != r);
 }
 
-void screen::attroff_(a attr) {
-    if (ERR == wattroff(W, attr_map[attr]))
-        throw "wattroff: ERR; attr = " + std::to_string((int)attr);
+void screen::attroff_(a attrs) {
+    if (ERR == wattroff(W, attr_map[attrs]))
+        throw "wattroff: ERR; attrs = " + std::to_string(attrs.value);
 }
 
-void screen::attron_(a attr) {
-    if (ERR == wattron(W, attr_map[attr]))
-        throw "wattron: ERR; attr = " + std::to_string((int)attr);
+void screen::attron_(a attrs) {
+    if (ERR == wattron(W, attr_map[attrs]))
+        throw "wattron: ERR; attrs = " + std::to_string(attrs.value);
 }
 
 void screen::keypad(bool bf) {

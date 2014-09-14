@@ -7,7 +7,16 @@
 
 namespace ccurses {
 
-enum class a { bold };
+struct a {
+    int value;
+
+    friend a operator&(a lhs, a rhs) { return a{lhs.value & rhs.value}; }
+    friend a operator|(a lhs, a rhs) { return a{lhs.value | rhs.value}; }
+
+    explicit operator bool() const { return value != 0; }
+
+} const a_bold{1}, a_underline{2};
+
 
 int key_f(int);
 
@@ -27,9 +36,9 @@ class screen {
 
     ~screen();
 
-    void attroff(a attr) { attroff_(attr); }
+    void attroff(a attrs) { attroff_(attrs); }
 
-    void attron(a attr) { attron_(attr); }
+    void attron(a attrs) { attron_(attrs); }
 
     int getch() { return getch_(); }
 
@@ -48,9 +57,9 @@ class update {
 
     ~update();
 
-    void attroff(a attr) { m_window->attroff(attr); }
+    void attroff(a attrs) { m_window->attroff(attrs); }
 
-    void attron(a attr) { m_window->attron(attr); }
+    void attron(a attrs) { m_window->attron(attrs); }
 
     template <class... T>
     void printw(const char* fmt, T... xs) { m_window->printw(fmt, xs...); }

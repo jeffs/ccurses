@@ -31,9 +31,9 @@ void application::draw() {
         up.printw("F1 Key pressed");    // Without noecho ugly escape
     } else {                            // characters might have been printed.
         up.printw("The pressed key is ");
-        up.attron(ccurses::a::bold);
+        up.attron(ccurses::a_bold);
         up.printw("%c", ch);
-        up.attroff(ccurses::a::bold);
+        up.attroff(ccurses::a_bold);
     }
 }
 
