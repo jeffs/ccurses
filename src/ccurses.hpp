@@ -7,16 +7,21 @@
 
 namespace ccurses {
 
-struct a {
+struct attribute {
+
     int value;
 
-    friend a operator&(a lhs, a rhs) { return a{lhs.value & rhs.value}; }
-    friend a operator|(a lhs, a rhs) { return a{lhs.value | rhs.value}; }
+    friend attribute operator&(attribute lhs, attribute rhs) {
+        return attribute{lhs.value & rhs.value};
+    }
+
+    friend attribute operator|(attribute lhs, attribute rhs) {
+        return attribute{lhs.value | rhs.value};
+    }
 
     explicit operator bool() const { return value != 0; }
 
 } const a_bold{1}, a_underline{2};
-
 
 int key_f(int);
 
@@ -27,8 +32,8 @@ void raw();
 class screen {
     void* m_window;
 
-    void attroff_(a);
-    void attron_(a);
+    void attroff_(attribute);
+    void attron_(attribute);
     int getch_();
     void getmaxyx_(int& row, int& col) const;
     void move_(int y, int x);
@@ -38,9 +43,9 @@ class screen {
 
     ~screen();
 
-    void attroff(a attrs) { attroff_(attrs); }
+    void attroff(attribute attrs) { attroff_(attrs); }
 
-    void attron(a attrs) { attron_(attrs); }
+    void attron(attribute attrs) { attron_(attrs); }
 
     int getch() { return getch_(); }
 

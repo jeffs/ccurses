@@ -12,7 +12,7 @@ namespace ccurses {
 
 struct {
 
-    int operator[](a attrs) const {
+    int operator[](attribute attrs) const {
         return (attrs & a_bold      ? A_BOLD : 0)
             |  (attrs & a_underline ? A_UNDERLINE : 0);
     }
@@ -29,12 +29,12 @@ void raw() { if (ERR == ::raw()) throw "raw: ERR"; }
 
 #define W (WINDOW*)m_window
 
-void screen::attroff_(a attrs) {
+void screen::attroff_(attribute attrs) {
     if (ERR == wattroff(W, attr_map[attrs]))
         throw "wattroff: ERR; attrs = " + to_string(attrs.value);
 }
 
-void screen::attron_(a attrs) {
+void screen::attron_(attribute attrs) {
     if (ERR == wattron(W, attr_map[attrs]))
         throw "wattron: ERR; attrs = " + to_string(attrs.value);
 }
