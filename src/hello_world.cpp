@@ -2,8 +2,7 @@
 
 int main() {
     ccurses::screen win;
-    ccurses::update up(&win);
-    up.printw("Hello World !!!");
-    up.refresh();
+    win.printw("Hello World !!!");
+    win.refresh();
     win.getch();
 }

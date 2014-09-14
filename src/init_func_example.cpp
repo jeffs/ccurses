@@ -6,39 +6,35 @@
 
 #include <iostream> // cerr, endl
 
-class application {
-
-    ccurses::screen m_window;
-
+class application: ccurses::screen {
     void draw();
-
   public:
 
     application() {
         ccurses::raw();     // Disable line buffering.
-        m_window.keypad();  // Get F1, F2, etc.
+        keypad();           // Get F1, F2, etc.
         ccurses::noecho();  // Don't echo() while we do getch.
     }
 
     void main() {
         draw();
-        m_window.getch();   // Wait for user input.
+        getch();            // Wait for user input.
     }
 
 };
 
 void application::draw() {
-    ccurses::update up(&m_window);
-    up.printw("Type any character to see it in bold\n");
-    int ch = m_window.getch();      // We called keypad so F1 would get to us.
+    printw("Type any character to see it in bold\n");
+    int ch = getch();               // We called keypad so F1 would get to us.
     if (ch == ccurses::key_f(1)) {
-        up.printw("F1 Key pressed");    // Without noecho ugly escape
+        printw("F1 Key pressed");       // Without noecho ugly escape
     } else {                            // characters might have been printed.
-        up.printw("The pressed key is ");
-        up.attron(ccurses::a_bold);
-        up.printw("%c", ch);
-        up.attroff(ccurses::a_bold);
+        printw("The pressed key is ");
+        attron(ccurses::a_bold);
+        printw("%c", ch);
+        attroff(ccurses::a_bold);
     }
+    refresh();
 }
 
 int main() try {

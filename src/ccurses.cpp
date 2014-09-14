@@ -92,12 +92,4 @@ void screen::printw(const char* fmt, ...) {
 
 #undef W
 
-// class update
-
-update::~update() try {
-    refresh();
-} catch (...) {
-    assert(false);
-}
-
 }

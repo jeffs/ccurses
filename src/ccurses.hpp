@@ -57,24 +57,6 @@ class screen {
     void getmaxyx(int& row, int& col) const { getmaxyx_(row, col); }
 };
 
-class update {
-    screen* m_window;
-  public:
-
-    explicit update(screen* window): m_window(window) { }
-
-    ~update();
-
-    void attroff(a attrs) { m_window->attroff(attrs); }
-
-    void attron(a attrs) { m_window->attron(attrs); }
-
-    template <class... T>
-    void printw(const char* fmt, T... xs) { m_window->printw(fmt, xs...); }
-
-    void refresh() { m_window->refresh(); }
-};
-
 }
 
 #endif
