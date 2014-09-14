@@ -808,7 +808,7 @@ int main(int argc, char** argv) try
         "CXX = clang++\n"
         "CPPFLAGS = -I$(SRCDIR)\n"
         "CXXFLAGS = -std=c++1y -pedantic -Wall -stdlib=libc++\n"
-        "LDFLAGS = -lc++\n"
+        "LDFLAGS = -lc++ -lncurses\n"
         "MKDIR = mkdir -p\n"
         "RMDIR = rm -rf\n",
 
