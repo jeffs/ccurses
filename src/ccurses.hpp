@@ -37,9 +37,11 @@ class screen {
     void attroff_(attribute);
     void attron_(attribute);
     int getch_();
-    void getmaxyx_(int& row, int& col) const;
     void getnstr_(char* str, int n);
     void move_(int y, int x);
+
+    void getmaxyx_(int& row, int& col) const;
+    void getyx_(int& y, int& x) const;
   public:
 
     screen();
@@ -49,6 +51,8 @@ class screen {
     void attroff(attribute attrs) { attroff_(attrs); }
 
     void attron(attribute attrs) { attron_(attrs); }
+
+    void clear();
 
     int getch() { return getch_(); }
 
@@ -65,6 +69,8 @@ class screen {
     void refresh();
 
     void getmaxyx(int& row, int& col) const { getmaxyx_(row, col); }
+
+    void getyx(int& y, int& x) const { return getyx_(y, x); }
 };
 
 }

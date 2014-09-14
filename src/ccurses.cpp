@@ -47,10 +47,6 @@ int screen::getch_() { // getch is a macro
     return r;
 }
 
-void screen::getmaxyx_(int& row, int& col) const {
-    getmaxyx(W, row, col);  // macro
-}
-
 void screen::getnstr_(char* str, int n) {
     int r = wgetnstr(W, str, n);
     if (ERR == r) throw "getnstr: ERR; n = " + to_string(n);
@@ -59,6 +55,14 @@ void screen::getnstr_(char* str, int n) {
 void screen::move_(int y, int x) {
     if (ERR == wmove(W, y, x))
         throw "move: ERR; y = " + to_string(y) + ", x = " + to_string(x);
+}
+
+void screen::getmaxyx_(int& row, int& col) const {
+    getmaxyx(W, row, col);  // macro
+}
+
+void screen::getyx_(int& y, int& x) const {
+    getyx(W, y, x);         // macro
 }
 
 screen::screen(): m_window(initscr()) {
@@ -71,9 +75,13 @@ screen::~screen() {
     assert(ERR != r);
 }
 
+void screen::clear() {
+    if (ERR == wclear(W)) throw "wclear: ERR";
+}
+
 void screen::keypad(bool bf) {
-    int r = ::keypad(W, bf ? TRUE : FALSE);
-    if (ERR == r) throw "keypad: ERR; bf = " + to_string(bf);
+    if (ERR == ::keypad(W, bf ? TRUE : FALSE))
+        throw "keypad: ERR; bf = " + to_string(bf);
 }
 
 void screen::mvprintw(int y, int x, char const* fmt, ...) {
