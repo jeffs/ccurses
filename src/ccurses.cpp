@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 
+#include <array>
 #include <string>
 
 using namespace std::string_literals;
@@ -28,6 +29,21 @@ struct {
 
 } const attr_map{};
 
+std::array<int, 8> const color_map = {{
+    COLOR_BLACK,
+    COLOR_RED,
+    COLOR_GREEN,
+    COLOR_YELLOW,
+    COLOR_BLUE,
+    COLOR_MAGENTA,
+    COLOR_CYAN,
+    COLOR_WHITE
+}};
+
+void init_pair(short pair, color f, color b) {
+    ::init_pair(pair, color_map[int(f)], color_map[int(b)]);
+}
+
 int key_f(int i) { return KEY_F(i); }
 
 int lines() { return LINES; }
@@ -35,6 +51,8 @@ int lines() { return LINES; }
 void noecho() { if (ERR == ::noecho()) throw "noecho: ERR"; }
 
 void raw() { if (ERR == ::raw()) throw "raw: ERR"; }
+
+void start_color() { if (ERR == ::start_color()) throw "start_color: ERR"; }
 
 // class screen
 
@@ -64,6 +82,19 @@ void screen::getnstr_(char* str, int n) {
 void screen::move_(int y, int x) {
     if (ERR == wmove(W, y, x))
         throw "move: ERR; y = " + to_string(y) + ", x = " + to_string(x);
+}
+
+void screen::mvchgat_(
+        int         y,
+        int         x,
+        int         n,
+        attribute   attrs,
+        short       color,
+        void const* opts) {
+    if (ERR == mvwchgat(W, y, x, n, attr_map[attrs], color, opts))
+        throw "mvwchgat: ERR; y = " + to_string(y) + ", x = " + to_string(x) +
+            ", n = " + to_string(n) + ", attrs = " + to_string(attrs.value) +
+            ", color = " + to_string(color);
 }
 
 void screen::getmaxyx_(int& row, int& col) const {

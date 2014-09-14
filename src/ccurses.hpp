@@ -34,6 +34,10 @@ struct attribute {
     a_altcharset { 1 <<  9 },   // Alternate character set
     a_chartext   { 1 << 10 };   // Bit-mask to extract a character
 
+enum class color { black, red, green, yellow, blue, magenta, cyan, white };
+
+void init_pair(short pair, color f, color b);
+
 int key_f(int);
 
 int lines();
@@ -41,6 +45,8 @@ int lines();
 void noecho();
 
 void raw();
+
+void start_color();
 
 class screen {
     void* m_window;
@@ -50,6 +56,13 @@ class screen {
     int getch_();
     void getnstr_(char* str, int n);
     void move_(int y, int x);
+    void mvchgat_(
+            int         y,
+            int         x,
+            int         n,
+            attribute   attrs,
+            short       color,
+            void const* opts);
 
     void getmaxyx_(int& row, int& col) const;
     void getyx_(int& y, int& x) const;
@@ -72,6 +85,16 @@ class screen {
     void keypad(bool bf =true);
 
     void move(int y, int x) { move_(y, x); }
+
+    void mvchgat(
+            int         y,
+            int         x,
+            int         n,
+            attribute   attrs,
+            short       color,
+            void const* opts =nullptr) {
+        mvchgat_(y, x, n, attrs, color, opts);
+    }
 
     void mvprintw(int y, int x, char const* fmt, ...);
 
