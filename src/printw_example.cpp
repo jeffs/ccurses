@@ -1,4 +1,4 @@
-/** @file printw_example.cpp Based on Example 3:
+/** @file printw_example.cpp Example 3
  * http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/printw.html
  */
 
