@@ -18,7 +18,7 @@ class application {
 
     void main() {
         draw();
-        ccurses::getch();   // Wait for user input.
+        m_window.getch();   // Wait for user input.
     }
 
 };
@@ -26,7 +26,7 @@ class application {
 void application::draw() {
     ccurses::update up(&m_window);
     up.printw("Type any character to see it in bold\n");
-    int ch = ccurses::getch();      // We called keypad so F1 would get to us.
+    int ch = m_window.getch();      // We called keypad so F1 would get to us.
     if (ch == ccurses::key_f(1)) {
         up.printw("F1 Key pressed");    // Without noecho ugly escape
     } else {                            // characters might have been printed.

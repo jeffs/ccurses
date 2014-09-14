@@ -2,7 +2,6 @@
 
 #include <ncurses.h>
 
-#include <cassert>
 #include <string>
 
 namespace ccurses {
@@ -16,12 +15,6 @@ struct {
 
 } const attr_map{};
 
-int detail::getch_() {
-    int r = getch(); // getch is a macro
-    if (ERR == r) throw "getch: ERR";
-    return r;
-}
-
 int key_f(int i) { return KEY_F(i); }
 
 void noecho() { if (ERR == ::noecho()) throw "noecho: ERR"; }
@@ -30,41 +23,59 @@ void raw() { if (ERR == ::raw()) throw "raw: ERR"; }
 
 // class screen
 
-screen::screen(): m_window(initscr()) {
-    if (!m_window) throw "initscr: ERR";
+#define W (WINDOW*)m_window
+
+int screen::getch_() { // getch is a macro
+    int r = wgetch(W);
+    if (ERR == r) throw "getch: ERR";
+    return r;
 }
 
-screen::~screen() { int r = endwin(); assert(ERR != r); }
+screen::screen(): m_window(initscr()) {
+    if (!m_window) throw "initscr: ERR";
+    assert(m_window == stdscr);
+}
+
+screen::~screen() {
+    int r = endwin();
+    assert(ERR != r);
+}
+
+void screen::attroff_(a attr) {
+    if (ERR == wattroff(W, attr_map[attr]))
+        throw "wattroff: ERR; attr = " + std::to_string((int)attr);
+}
+
+void screen::attron_(a attr) {
+    if (ERR == wattron(W, attr_map[attr]))
+        throw "wattron: ERR; attr = " + std::to_string((int)attr);
+}
 
 void screen::keypad(bool bf) {
-    int r = ::keypad((WINDOW*)m_window, bf ? TRUE : FALSE);
+    int r = ::keypad(W, bf ? TRUE : FALSE);
     if (ERR == r) throw "keypad: ERR; bf = " + std::to_string(bf);
 }
 
-void screen::wprintw(const char* fmt, ...) {
+void screen::refresh() {
+    if (ERR == wrefresh(W)) throw "refresh: ERR";
+}
+
+void screen::printw(const char* fmt, ...) {
     va_list argp;
     va_start(argp, fmt);
-    int r = ::vw_printw((WINDOW*)m_window, fmt, argp);
+    int r = ::vw_printw(W, fmt, argp);
     va_end(argp);
     if (ERR == r) throw "wprintw: ERR";
 }
 
+#undef W
+
 // class update
 
-void update::attroff_(a attribute) {
-    int r = attroff(attr_map[attribute]);
-    if (ERR == r)
-        throw "attroff: ERR; attribute = " + std::to_string((int)attribute);
+update::~update() try {
+    refresh();
+} catch (...) {
+    assert(false);
 }
-
-void update::attron_(a attribute) {
-    int r = attron(attr_map[attribute]);  // attron is a macro
-    if (ERR == r)
-        throw "attron: ERR; attribute = " + std::to_string((int)attribute);
-}
-
-update::~update() { int r = ::refresh(); assert(ERR != r); }
-
-void update::refresh() { if (ERR == ::refresh()) throw "refresh: ERR"; }
 
 }

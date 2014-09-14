@@ -5,5 +5,5 @@ int main() {
     ccurses::update up(&win);
     up.printw("Hello World !!!");
     up.refresh();
-    ccurses::getch();
+    win.getch();
 }
