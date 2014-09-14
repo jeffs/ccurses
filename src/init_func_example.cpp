@@ -1,3 +1,7 @@
+/** @file init_func_example.cpp Example 2
+ * http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html
+ */
+
 #include "ccurses.hpp"
 
 #include <iostream> // cerr, endl
