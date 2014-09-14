@@ -13,8 +13,17 @@ namespace ccurses {
 struct {
 
     int operator[](attribute attrs) const {
-        return (attrs & a_bold      ? A_BOLD : 0)
-            |  (attrs & a_underline ? A_UNDERLINE : 0);
+        return (attrs & a_normal     ? A_NORMAL     : 0)
+            |  (attrs & a_standout   ? A_STANDOUT   : 0)
+            |  (attrs & a_underline  ? A_UNDERLINE  : 0)
+            |  (attrs & a_reverse    ? A_REVERSE    : 0)
+            |  (attrs & a_blink      ? A_BLINK      : 0)
+            |  (attrs & a_dim        ? A_DIM        : 0)
+            |  (attrs & a_bold       ? A_BOLD       : 0)
+            |  (attrs & a_protect    ? A_PROTECT    : 0)
+            |  (attrs & a_invis      ? A_INVIS      : 0)
+            |  (attrs & a_altcharset ? A_ALTCHARSET : 0)
+            |  (attrs & a_chartext   ? A_CHARTEXT   : 0);
     }
 
 } const attr_map{};

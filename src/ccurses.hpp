@@ -21,7 +21,18 @@ struct attribute {
 
     explicit operator bool() const { return value != 0; }
 
-} const a_bold{1}, a_underline{2};
+} const
+    a_normal     { 1 <<  0 },   // Normal display (no highlight)
+    a_standout   { 1 <<  1 },   // Best highlighting mode of the terminal.
+    a_underline  { 1 <<  2 },   // Underlining
+    a_reverse    { 1 <<  3 },   // Reverse video
+    a_blink      { 1 <<  4 },   // Blinking
+    a_dim        { 1 <<  5 },   // Half bright
+    a_bold       { 1 <<  6 },   // Extra bright or bold
+    a_protect    { 1 <<  7 },   // Protected mode
+    a_invis      { 1 <<  8 },   // Invisible or blank mode
+    a_altcharset { 1 <<  9 },   // Alternate character set
+    a_chartext   { 1 << 10 };   // Bit-mask to extract a character
 
 int key_f(int);
 
