@@ -1,13 +1,9 @@
-/** @file hello_world.cpp Based on TLDP NCURSES Programming HOWTO.
- * http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/helloworld.html
- */
-
-#include <ncurses.h>
+#include "ccurses.hpp"
 
 int main() {
-    initscr();                      // Start curses mode
-    printw("Hello World !!!");      // Print Hello World
-    refresh();                      // Print it on to the real screen
-    getch();                        // Wait for user input
-    endwin();                       // End curses mode
+    ccurses::screen win;
+    ccurses::update up(&win);
+    up.printw("Hello World !!!");
+    up.refresh();
+    ccurses::getch();
 }
