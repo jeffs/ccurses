@@ -30,6 +30,8 @@ class screen {
     void attroff_(a);
     void attron_(a);
     int getch_();
+    void getmaxyx_(int& row, int& col) const;
+    void move_(int y, int x);
   public:
 
     screen();
@@ -44,9 +46,15 @@ class screen {
 
     void keypad(bool bf =true);
 
+    void move(int y, int x) { move_(y, x); }
+
+    void mvprintw(int y, int x, char const* fmt, ...);
+
     void printw(const char* fmt, ...);
 
     void refresh();
+
+    void getmaxyx(int& row, int& col) const { getmaxyx_(row, col); }
 };
 
 class update {
