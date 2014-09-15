@@ -54,10 +54,20 @@ std::array<int, 8> const color_map = {{
     COLOR_WHITE
 }};
 
+int const
+    key_left    = KEY_LEFT,
+    key_right   = KEY_RIGHT,
+    key_up      = KEY_UP,
+    key_down    = KEY_DOWN;
+
 // class screen
 
 screen::screen() {
     system.initialize();
+}
+
+void screen::cbreak() {
+    ::cbreak();
 }
 
 void screen::init_pair(short pair, color f, color b) {
@@ -66,13 +76,17 @@ void screen::init_pair(short pair, color f, color b) {
 
 int screen::key_f(int i) { return KEY_F(i); }
 
-int screen::lines() { return LINES; }
-
 void screen::noecho() { if (ERR == ::noecho()) throw "noecho: ERR"; }
 
 void screen::raw() { if (ERR == ::raw()) throw "raw: ERR"; }
 
-void screen::start_color() { if (ERR == ::start_color()) throw "start_color: ERR"; }
+void screen::start_color() {
+    if (ERR == ::start_color()) throw "start_color: ERR";
+}
+
+int screen::cols() const { return COLS; }
+
+int screen::lines() const { return LINES; }
 
 // class window
 
@@ -86,6 +100,26 @@ void window::attroff_(attribute attrs) {
 void window::attron_(attribute attrs) {
     if (ERR == wattron(W, map_attr(attrs)))
         throw "wattron: ERR; attrs = " + to_string(attrs.value);
+}
+
+void window::border_(
+        int ls,
+        int rs,
+        int ts,
+        int bs,
+        int tl,
+        int tr,
+        int bl,
+        int br) {
+    if (ERR == wborder(W, ls, rs, ts, bs, tl, tr, bl, br))
+        throw "border: ERR; ls = " + to_string(ls)
+            + "rs = " + to_string(rs)
+            + "ts = " + to_string(ts)
+            + "bs = " + to_string(bs)
+            + "tl = " + to_string(tl)
+            + "tr = " + to_string(tr)
+            + "bl = " + to_string(bl)
+            + "br = " + to_string(br);
 }
 
 int window::getch_() { // getch is a macro
@@ -130,9 +164,9 @@ window::window() {
     m_window = stdscr;
 }
 
-window::window(int nlines, int ncols, int begin_x, int begin_y) {
+window::window(int nlines, int ncols, int begin_y, int begin_x) {
     system.initialize();
-    m_window = newwin(nlines, ncols, begin_y, begin_y);
+    m_window = newwin(nlines, ncols, begin_y, begin_x);
     if (!m_window) throw "newwin: ERR; nlines = " + to_string(nlines)
         + ", ncols = " + to_string(ncols)
         + ", begin_x = " + to_string(begin_x)
@@ -142,6 +176,12 @@ window::window(int nlines, int ncols, int begin_x, int begin_y) {
 window::~window() {
     if (W != stdscr)
         delwin(W);
+}
+
+void window::box(int verch, int horch) {
+    if (ERR == ::box(W, chtype(verch), chtype(horch)))
+        throw "box: ERR; verch = " + to_string(verch)
+            + ", horch = " + to_string(horch);
 }
 
 void window::clear() {

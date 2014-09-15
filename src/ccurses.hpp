@@ -36,21 +36,27 @@ struct attribute {
 
 enum class color { black, red, green, yellow, blue, magenta, cyan, white };
 
+extern int const key_left, key_right, key_up, key_down;
+
 struct screen {
 
     screen();
 
+    void cbreak();
+
     void init_pair(short pair, color f, color b);
 
     int key_f(int);
-
-    int lines();
 
     void noecho();
 
     void raw();
 
     void start_color();
+
+    int cols() const;
+
+    int lines() const;
 };
 
 class window {
@@ -58,19 +64,14 @@ class window {
 
     void attroff_(attribute);
     void attron_(attribute);
+    void border_(int, int, int, int, int, int, int, int);
     int getch_();
-    void getnstr_(char* str, int n);
-    void move_(int y, int x);
-    void mvchgat_(
-            int         y,
-            int         x,
-            int         n,
-            attribute   attrs,
-            short       color,
-            void const* opts);
+    void getnstr_(char*, int);
+    void move_(int, int);
+    void mvchgat_(int, int, int, attribute, short, void const*);
 
-    void getmaxyx_(int& row, int& col) const;
-    void getyx_(int& y, int& x) const;
+    void getmaxyx_(int&, int&) const;
+    void getyx_(int&, int&) const;
 
   public:
 
@@ -87,6 +88,20 @@ class window {
     void attroff(attribute attrs) { attroff_(attrs); }
 
     void attron(attribute attrs) { attron_(attrs); }
+
+    void border(
+            int ls,     // character for left side of window
+            int rs,     // character for right side of window
+            int ts,     // character for top  side of window
+            int bs,     // character for bottom side of window
+            int tl,     // character for top left corner of window
+            int tr,     // character for top right corner of window
+            int bl,     // character for bottom left corner of window
+            int br) {   // character for bottom right corner of window
+        border_(ls, rs, ts, bs, tl, tr, bl, tr);
+    }
+
+    void box(int verch, int horch);
 
     void clear();
 
