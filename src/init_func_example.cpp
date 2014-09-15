@@ -6,14 +6,14 @@
 
 #include <iostream> // cerr, endl
 
-class application: ccurses::screen {
+class application: ccurses::screen, ccurses::window {
     void draw();
   public:
 
     application() {
-        ccurses::raw();     // Disable line buffering.
-        keypad();           // Get F1, F2, etc.
-        ccurses::noecho();  // Don't echo() while we do getch.
+        raw();     // Disable line buffering.
+        keypad();  // Get F1, F2, etc.
+        noecho();  // Don't echo() while we do getch.
     }
 
     void main() {
@@ -26,9 +26,9 @@ class application: ccurses::screen {
 void application::draw() {
     printw("Type any character to see it in bold\n");
     int ch = getch();               // We called keypad so F1 would get to us.
-    if (ch == ccurses::key_f(1)) {
-        printw("F1 Key pressed");       // Without noecho ugly escape
-    } else {                            // characters might have been printed.
+    if (ch == key_f(1)) {
+        printw("F1 Key pressed");   // Without noecho ugly escape characters
+    } else {                        // might have been printed.
         printw("The pressed key is ");
         attron(ccurses::a_bold);
         printw("%c", ch);

@@ -9,21 +9,20 @@
 using namespace std::string_literals;
 
 int main() {
-
-    ccurses::screen window;
+    ccurses::window w;
 
     int row, col;
-    window.getmaxyx(row, col);
+    w.getmaxyx(row, col);
 
     auto mesg = "Just a string"s;
-    window.mvprintw(row / 2, (col - mesg.size()) / 2, "%s", mesg.c_str());
+    w.mvprintw(row / 2, (col - mesg.size()) / 2, "%s", mesg.c_str());
 
-    window.mvprintw(row - 2, 0,
+    w.mvprintw(row - 2, 0,
             "This screen has %d rows and %d columns.\n", row, col);
 
-    window.printw("Try resizing your window and then run this program again.");
+    w.printw("Try resizing your window and then run this program again.");
 
-    window.refresh();
+    w.refresh();
 
-    window.getch();
+    w.getch();
 }

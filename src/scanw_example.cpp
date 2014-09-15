@@ -9,19 +9,19 @@
 using namespace std::string_literals;
 
 int main() {
-
-    ccurses::screen window;
+    ccurses::window w;
 
     int row, col;
-    window.getmaxyx(row, col);
+    w.getmaxyx(row, col);
 
     auto mesg = "Enter a string: "s;
-    window.mvprintw(row / 2, (col - mesg.size()) / 2, "%s", mesg.c_str());
+    w.mvprintw(row / 2, (col - mesg.size()) / 2, "%s", mesg.c_str());
 
     std::vector<char> str(80);
-    window.getnstr(str.data(), str.size() - 1);
+    w.getnstr(str.data(), str.size() - 1);
 
-    window.mvprintw(ccurses::lines() - 2, 0, "You Entered: %s", str.data());
+    ccurses::screen s;
+    w.mvprintw(s.lines() - 2, 0, "You Entered: %s", str.data());
 
-    window.getch();
+    w.getch();
 }

@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) try {
     if (!fp)
         throw "Cannot open input file: "s + std::strerror(errno);
 
-    ccurses::screen w;
+    ccurses::window w;
 
     int row, col;
     w.getmaxyx(row, col);

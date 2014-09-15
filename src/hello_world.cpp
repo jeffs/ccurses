@@ -5,8 +5,8 @@
 #include "ccurses.hpp"
 
 int main() {
-    ccurses::screen win;
-    win.printw("Hello World !!!");
-    win.refresh();
-    win.getch();
+    ccurses::window w;
+    w.printw("Hello World !!!");
+    w.refresh();
+    w.getch();
 }

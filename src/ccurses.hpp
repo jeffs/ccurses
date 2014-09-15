@@ -36,19 +36,24 @@ struct attribute {
 
 enum class color { black, red, green, yellow, blue, magenta, cyan, white };
 
-void init_pair(short pair, color f, color b);
+struct screen {
 
-int key_f(int);
+    screen();
 
-int lines();
+    void init_pair(short pair, color f, color b);
 
-void noecho();
+    int key_f(int);
 
-void raw();
+    int lines();
 
-void start_color();
+    void noecho();
 
-class screen {
+    void raw();
+
+    void start_color();
+};
+
+class window {
     void* m_window;
 
     void attroff_(attribute);
@@ -66,11 +71,18 @@ class screen {
 
     void getmaxyx_(int& row, int& col) const;
     void getyx_(int& y, int& x) const;
+
   public:
 
-    screen();
+    window();
 
-    ~screen();
+    window(int nlines, int ncols, int begin_x, int begin_y);
+
+    window(window const&) = delete;
+
+    ~window();
+
+    window& operator=(window const&) = delete;
 
     void attroff(attribute attrs) { attroff_(attrs); }
 
